@@ -1,7 +1,8 @@
 {%- comment -%} ===== US Midterms 2026 — shared setup ===== {%- endcomment -%}
 {%- assign cf = trmnl.plugin_settings.custom_fields_values -%}
-{%- assign lang = cf.language | default: "en" | split: "_" | last -%}
+{%- assign lang = cf.language | default: forced_lang | default: "en" | split: "_" | last -%}
 {%- assign view = cf.view | default: "overview" | split: "_" | last -%}
+{%- if forced_view -%}{%- assign view = forced_view -%}{%- endif -%}
 {%- assign now = trmnl.system.timestamp_utc | default: updated_ts -%}
 {%- assign off = trmnl.user.utc_offset | default: 0 -%}
 {%- if view == "rotate" -%}
