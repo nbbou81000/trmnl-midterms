@@ -13,7 +13,7 @@ Résultats en direct des élections de mi-mandat américaines du 3 novembre 2026
 | Battleground | Toutes les courses serrées du Sénat et des gouverneurs, plus les courses indécises de la Chambre. |
 | Latest calls | Les 12 derniers résultats annoncés, avec l'heure et les bascules. |
 | My state | Sénat et gouverneur de l'État choisi, plus le détail de sa délégation à la Chambre, district par district. |
-| Rotate | Change d'écran toutes les 10 minutes. |
+| Rotate | Change d'écran toutes les 5 minutes. |
 
 Les quatre tailles TRMNL sont gérées (plein écran, demi horizontal, demi vertical, quart), avec des versions adaptées au TRMNL X.
 

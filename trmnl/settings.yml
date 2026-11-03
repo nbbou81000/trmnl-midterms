@@ -27,7 +27,7 @@ custom_fields:
   - Battleground races: battleground
   - Latest calls: calls
   - My state: state
-  - Rotate every 10 min: rotate
+  - Rotate (new screen every 5 min): rotate
   default: overview
 - keyname: focus_state
   field_type: select

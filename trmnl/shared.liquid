@@ -5,7 +5,7 @@
 {%- assign now = trmnl.system.timestamp_utc | default: updated_ts -%}
 {%- assign off = trmnl.user.utc_offset | default: 0 -%}
 {%- if view == "rotate" -%}
-  {%- assign slot = now | divided_by: 600 | floor | modulo: 5 -%}
+  {%- assign slot = now | divided_by: 300 | floor | modulo: 5 -%}
   {%- case slot -%}
     {%- when 0 -%}{%- assign view = "overview" -%}
     {%- when 1 -%}{%- assign view = "senate" -%}
