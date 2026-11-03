@@ -2,7 +2,7 @@
 {%- if view == "nodata" -%}
   <div class="flex flex--col flex--center grow w--full gap">
     <span class="title">{% if lang == "fr" %}En attente des données{% else %}Waiting for data{% endif %}</span>
-    <span class="label label--gray">{% if lang == "fr" %}Enregistrez le plugin puis forcez l'actualisation{% else %}Save the plugin, then force a refresh{% endif %}</span>
+    <span class="label label--gray 1bit:text--black">{% if lang == "fr" %}Enregistrez le plugin puis forcez l'actualisation{% else %}Save the plugin, then force a refresh{% endif %}</span>
   </div>
 {%- endif -%}
 
@@ -34,7 +34,7 @@
     <div class="{% if wide %}col--span-5 {% endif %}flex flex--col flex--left flex--top gap--xsmall w--full">
       <div class="flex flex--row flex--between flex--center-y w--full">
         <span class="title title--small">{{ cname }}</span>
-        {%- if c.ctrl == "D" or c.ctrl == "R" -%}<span class="label label--small label--inverted">{% if c.ctrl == "D" %}{{ t_ctrl_d }}{% else %}{{ t_ctrl_r }}{% endif %}</span>{%- else -%}<span class="label label--small label--gray">{{ c.called }}/{{ c.total }}</span>{%- endif -%}
+        {%- if c.ctrl == "D" or c.ctrl == "R" -%}<span class="label label--small label--inverted">{% if c.ctrl == "D" %}{{ t_ctrl_d }}{% else %}{{ t_ctrl_r }}{% endif %}</span>{%- else -%}<span class="label label--small label--gray 1bit:text--black">{{ c.called }}/{{ c.total }}</span>{%- endif -%}
       </div>
       <div class="flex flex--row flex--between flex--bottom w--full">
         <div class="flex flex--row flex--bottom gap--small"><span class="value value--small lg:value--medium value--tnums">{{ c.d }}</span><span class="label label--small">{{ t_dem }}</span></div>
@@ -45,7 +45,7 @@
         <div class="grow h--full"></div>
         {%- if rp > 0 -%}<div class="bg--gray-50 h--full no-shrink w--[{{ rp }}px]"></div>{%- endif -%}{%- if rn > 0 -%}<div class="bg--gray-50 h--full no-shrink w--[{{ rn }}cqw]"></div>{%- endif -%}
       </div>
-      <span class="label label--small label--gray" data-clamp="1">{% if need != "" %}{{ need }} {{ t_to_win }}{% else %}{{ c.won_d }}–{{ c.won_r }} / {{ c.total }}{% endif %} · {{ t_flips }} D+{{ c.flip_d }} R+{{ c.flip_r }}</span>
+      <span class="label label--small label--gray 1bit:text--black" data-clamp="1">{% if need != "" %}{{ need }} {{ t_to_win }}{% else %}{{ c.won_d }}–{{ c.won_r }} / {{ c.total }}{% endif %} · {{ t_flips }} D+{{ c.flip_d }} R+{{ c.flip_r }}</span>
     </div>
   {%- endfor -%}
   {%- if wide -%}
@@ -58,7 +58,7 @@
         <tr>
           <td><span class="label label--small text--bold">{{ r.lbl }}</span></td>
           <td><span class="label label--small">{{ r.a.n }}{% if r.s != "wait" %} {{ r.a.pct }}{% endif %} · {{ r.b.n }}{% if r.s != "wait" %} {{ r.b.pct }}{% endif %}</span></td>
-          <td class="text--right">{%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }}{% if r.f == 1 %} {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}</td>
+          <td class="text--right">{%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }}{% if r.f == 1 %} {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray 1bit:text--black">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}</td>
         </tr>
         {%- endfor -%}
         </tbody>
@@ -75,7 +75,7 @@
     {%- for r in klist limit: 3 -%}
     <div class="flex flex--row flex--between flex--center-y gap--small w--full">
       <span class="label label--small"><span class="text--bold">{{ r.lbl }}{% if r.o == "S" %} Sen{% elsif r.o == "G" %} Gov{% endif %}&nbsp;</span>{% if r.s == "wait" %}{{ r.a.n }} / {{ r.b.n }}{% else %}{{ r.a.pct }}–{{ r.b.pct }}{% endif %}</span>
-      {%- if r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}
+      {%- if r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray 1bit:text--black">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}
     </div>
     {%- endfor -%}
   </div>
@@ -90,7 +90,7 @@
     <div class="flex flex--col flex--left flex--top gap--xsmall w--full">
       <div class="flex flex--row flex--between flex--center-y w--full">
         <span class="title title--small">{{ r.lbl }} {% if r.o == "S" %}{{ t_senate }}{% else %}Gov{% endif %}</span>
-        {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }} {{ t_win }}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.in }}%</span>{%- else -%}<span class="label label--small label--gray">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}
+        {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }} {{ t_win }}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.in }}%</span>{%- else -%}<span class="label label--small label--gray 1bit:text--black">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}
       </div>
       <div class="flex flex--row flex--between w--full"><span class="label label--small">{{ r.a.n }} ({{ r.a.p }})</span><span class="value value--xxsmall value--tnums">{% if r.s != "wait" %}{{ r.a.pct }}%{% else %}–{% endif %}</span></div>
       <div class="flex flex--row flex--between w--full"><span class="label label--small">{{ r.b.n }} ({{ r.b.p }})</span><span class="value value--xxsmall value--tnums">{% if r.s != "wait" %}{{ r.b.pct }}%{% else %}–{% endif %}</span></div>
@@ -102,7 +102,7 @@
         <div class="flex flex--row flex--bottom gap--small"><span class="value value--small value--tnums">{{ hs.d }}</span><span class="label label--small">{{ t_dem }}</span></div>
         <div class="flex flex--row flex--bottom gap--small"><span class="label label--small">{{ t_rep }}</span><span class="value value--small value--tnums">{{ hs.r }}</span></div>
       </div>
-      <span class="label label--small label--gray">{{ hs.called }}/{{ hs.total }} {{ t_called }}{% if hs.lead_d > 0 or hs.lead_r > 0 %} · {{ t_lead }} {{ hs.lead_d }}–{{ hs.lead_r }}{% endif %}</span>
+      <span class="label label--small label--gray 1bit:text--black">{{ hs.called }}/{{ hs.total }} {{ t_called }}{% if hs.lead_d > 0 or hs.lead_r > 0 %} · {{ t_lead }} {{ hs.lead_d }}–{{ hs.lead_r }}{% endif %}</span>
     </div>
   </div>
 
@@ -118,14 +118,14 @@
   {%- for r in list -%}
       <div class="item"><div class="meta"></div><div class="content w--full"><div class="flex flex--row flex--between flex--center-y gap--small w--full">
         <span class="label label--small"><span class="text--bold">{{ r.lbl }}{% if r.o == "S" %} Sen{% elsif r.o == "G" %} Gov{% endif %}&nbsp;</span>{% if r.s == "wait" %}{{ r.a.n }} / {{ r.b.n }}{% else %}{{ r.wn }}{% endif %}</span>
-        {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }}{% if r.f == 1 %} {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}
+        {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }}{% if r.f == 1 %} {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray 1bit:text--black">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}
       </div>
 </div></div>
   {%- endfor -%}
   </div>
   </div>
   {%- else -%}
-    <span class="label label--gray">{% if phase == "pre" %}{{ t_first }} {{ cd_h }}h{% if cd_m < 10 %}0{% endif %}{{ cd_m }}{% else %}{{ t_none }}{% endif %}</span>
+    <span class="label label--gray 1bit:text--black">{% if phase == "pre" %}{{ t_first }} {{ cd_h }}h{% if cd_m < 10 %}0{% endif %}{{ cd_m }}{% else %}{{ t_none }}{% endif %}</span>
   {%- endif -%}
 {%- endif -%}
 </div>
