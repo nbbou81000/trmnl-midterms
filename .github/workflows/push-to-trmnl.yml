@@ -1,0 +1,33 @@
+name: Push plugin to TRMNL
+
+# Replaces the markup + settings of an EXISTING private plugin (same as `trmnlp push`).
+# Needs the repo secret TRMNL_API_KEY (trmnl.com/account → API key, starts with "user_").
+on:
+  workflow_dispatch:
+    inputs:
+      plugin_id:
+        description: "Plugin ID (the number in trmnl.com/plugin_settings/XXXXX/edit)"
+        required: true
+  push:
+    branches: [main]
+    paths: ["trmnl/**"]
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build archive and upload
+        env:
+          KEY: ${{ secrets.TRMNL_API_KEY }}
+          ID: ${{ github.event.inputs.plugin_id || vars.TRMNL_PLUGIN_ID }}
+        run: |
+          if [ -z "$KEY" ]; then echo "Missing secret TRMNL_API_KEY"; exit 1; fi
+          if [ -z "$ID" ]; then echo "No plugin id (input or variable TRMNL_PLUGIN_ID) - skipping"; exit 0; fi
+          cd trmnl && zip -q ../plugin.zip settings.yml full.liquid half_horizontal.liquid half_vertical.liquid quadrant.liquid shared.liquid && cd ..
+          code=$(curl -sS -o resp.txt -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer $KEY" -H "User-Agent: trmnl-midterms-action" \
+            -F "file=@plugin.zip;type=application/zip" \
+            "https://trmnl.com/api/plugin_settings/$ID/archive")
+          echo "HTTP $code"; head -c 400 resp.txt; echo
+          [ "$code" = "200" ]
