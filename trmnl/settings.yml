@@ -20,76 +20,76 @@ custom_fields:
   name: Screen
   description: What to show
   options:
-  - "Overview (3 chambers + key races + latest calls): overview"
-  - "Senate: senate"
-  - "House: house"
-  - "Governors: governors"
-  - "Battleground races: battleground"
-  - "Latest calls: calls"
-  - "My state: state"
-  - "Rotate every 10 min: rotate"
+  - Overview (3 chambers + key races + latest calls): overview
+  - Senate: senate
+  - House: house
+  - Governors: governors
+  - Battleground races: battleground
+  - Latest calls: calls
+  - My state: state
+  - Rotate every 10 min: rotate
   default: overview
 - keyname: focus_state
   field_type: select
   name: State
   description: Used by the "My state" screen (and by "Rotate")
   options:
-  - "None: us"
-  - "Alabama: al"
-  - "Alaska: ak"
-  - "Arizona: az"
-  - "Arkansas: ar"
-  - "California: ca"
-  - "Colorado: co"
-  - "Connecticut: ct"
-  - "Delaware: de"
-  - "Florida: fl"
-  - "Georgia: ga"
-  - "Hawaii: hi"
-  - "Idaho: id"
-  - "Illinois: il"
-  - "Indiana: in"
-  - "Iowa: ia"
-  - "Kansas: ks"
-  - "Kentucky: ky"
-  - "Louisiana: la"
-  - "Maine: me"
-  - "Maryland: md"
-  - "Massachusetts: ma"
-  - "Michigan: mi"
-  - "Minnesota: mn"
-  - "Mississippi: ms"
-  - "Missouri: mo"
-  - "Montana: mt"
-  - "Nebraska: ne"
-  - "Nevada: nv"
-  - "New Hampshire: nh"
-  - "New Jersey: nj"
-  - "New Mexico: nm"
-  - "New York: ny"
-  - "North Carolina: nc"
-  - "North Dakota: nd"
-  - "Ohio: oh"
-  - "Oklahoma: ok"
-  - "Oregon: or"
-  - "Pennsylvania: pa"
-  - "Rhode Island: ri"
-  - "South Carolina: sc"
-  - "South Dakota: sd"
-  - "Tennessee: tn"
-  - "Texas: tx"
-  - "Utah: ut"
-  - "Vermont: vt"
-  - "Virginia: va"
-  - "Washington: wa"
-  - "West Virginia: wv"
-  - "Wisconsin: wi"
-  - "Wyoming: wy"
+  - None: us
+  - Alabama: al
+  - Alaska: ak
+  - Arizona: az
+  - Arkansas: ar
+  - California: ca
+  - Colorado: co
+  - Connecticut: ct
+  - Delaware: de
+  - Florida: fl
+  - Georgia: ga
+  - Hawaii: hi
+  - Idaho: id
+  - Illinois: il
+  - Indiana: in
+  - Iowa: ia
+  - Kansas: ks
+  - Kentucky: ky
+  - Louisiana: la
+  - Maine: me
+  - Maryland: md
+  - Massachusetts: ma
+  - Michigan: mi
+  - Minnesota: mn
+  - Mississippi: ms
+  - Missouri: mo
+  - Montana: mt
+  - Nebraska: ne
+  - Nevada: nv
+  - New Hampshire: nh
+  - New Jersey: nj
+  - New Mexico: nm
+  - New York: ny
+  - North Carolina: nc
+  - North Dakota: nd
+  - Ohio: oh
+  - Oklahoma: ok
+  - Oregon: or
+  - Pennsylvania: pa
+  - Rhode Island: ri
+  - South Carolina: sc
+  - South Dakota: sd
+  - Tennessee: tn
+  - Texas: tx
+  - Utah: ut
+  - Vermont: vt
+  - Virginia: va
+  - Washington: wa
+  - West Virginia: wv
+  - Wisconsin: wi
+  - Wyoming: wy
   default: us
 - keyname: language
   field_type: select
   name: Language
   options:
-  - "English: en"
-  - "Français: fr"
+  - English: en
+  - Français: fr
   default: en
