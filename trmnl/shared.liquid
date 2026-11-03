@@ -1,0 +1,78 @@
+{%- comment -%} ===== US Midterms 2026 — shared setup ===== {%- endcomment -%}
+{%- assign cf = trmnl.plugin_settings.custom_fields_values -%}
+{%- assign lang = cf.language | default: "en" -%}
+{%- assign view = cf.view | default: "overview" -%}
+{%- assign now = trmnl.system.timestamp_utc | default: updated_ts -%}
+{%- assign off = trmnl.user.utc_offset | default: 0 -%}
+{%- if view == "rotate" -%}
+  {%- assign slot = now | divided_by: 600 | floor | modulo: 5 -%}
+  {%- case slot -%}
+    {%- when 0 -%}{%- assign view = "overview" -%}
+    {%- when 1 -%}{%- assign view = "senate" -%}
+    {%- when 2 -%}{%- assign view = "house" -%}
+    {%- when 3 -%}{%- assign view = "battleground" -%}
+    {%- else -%}{%- if focus -%}{%- assign view = "state" -%}{%- else -%}{%- assign view = "governors" -%}{%- endif -%}
+  {%- endcase -%}
+{%- endif -%}
+{%- if view == "state" and focus == nil -%}{%- assign view = "overview" -%}{%- assign need_state = true -%}{%- endif -%}
+
+{%- if lang == "fr" -%}
+  {%- assign tf = "%H:%M" -%}
+  {%- assign t_title = "Midterms 2026 · États-Unis" -%}
+  {%- assign t_senate = "Sénat" -%}{%- assign t_gov1 = "Gouverneur" -%}{%- assign t_house = "Chambre" -%}{%- assign t_gov = "Gouverneurs" -%}
+  {%- assign t_called = "attribués" -%}{%- assign t_to_win = "pour la majorité" -%}
+  {%- assign t_vp = "R : 50 + voix du vice-président" -%}
+  {%- assign t_flips = "Bascules" -%}{%- assign t_lead = "En tête" -%}{%- assign t_updated = "Mis à jour" -%}
+  {%- assign t_win = "élu" -%}{%- assign t_flip = "BASCULE" -%}{%- assign t_in = "dépouillé" -%}
+  {%- assign t_key = "Courses clés" -%}{%- assign t_latest = "Derniers résultats" -%}{%- assign t_pop = "Vote populaire" -%}
+  {%- assign t_battle = "Courses serrées" -%}{%- assign t_race = "Course" -%}{%- assign t_status = "Statut" -%}
+  {%- assign t_first = "Premiers bureaux fermés dans" -%}{%- assign t_closed = "États fermés" -%}{%- assign t_next = "Prochaine fermeture" -%}
+  {%- assign t_none = "Aucun résultat pour l'instant" -%}{%- assign t_demo = "SIMULATION" -%}
+  {%- assign t_dem = "DÉM" -%}{%- assign t_rep = "RÉP" -%}{%- assign t_ind = "IND" -%}
+  {%- assign t_ctrl_d = "MAJORITÉ DÉM" -%}{%- assign t_ctrl_r = "MAJORITÉ RÉP" -%}{%- assign t_seats = "sièges" -%}{%- assign t_races = "courses" -%}
+  {%- assign t_delegation = "Délégation à la Chambre" -%}{%- assign t_pick_state = "Choisissez un État dans les réglages" -%}
+  {%- assign t_waiting = "attente" -%}{%- assign t_held = "non renouvelés" -%}{%- assign t_close = "Fermeture" -%}
+  {%- assign t_special = "partielle" -%}{%- assign t_flips_title = "Sièges qui basculent" -%}{%- assign t_states = "États" -%}
+  {%- assign t_polls_closed = "Bureaux fermés" -%}{%- assign t_source = "Source : AP via The New York Times" -%}
+{%- else -%}
+  {%- assign tf = "%-I:%M %p" -%}
+  {%- assign t_title = "US Midterms 2026" -%}
+  {%- assign t_senate = "Senate" -%}{%- assign t_gov1 = "Governor" -%}{%- assign t_house = "House" -%}{%- assign t_gov = "Governors" -%}
+  {%- assign t_called = "called" -%}{%- assign t_to_win = "for control" -%}
+  {%- assign t_vp = "R: 50 + VP tiebreak" -%}
+  {%- assign t_flips = "Flips" -%}{%- assign t_lead = "Leading" -%}{%- assign t_updated = "Updated" -%}
+  {%- assign t_win = "wins" -%}{%- assign t_flip = "FLIP" -%}{%- assign t_in = "in" -%}
+  {%- assign t_key = "Key races" -%}{%- assign t_latest = "Latest calls" -%}{%- assign t_pop = "Popular vote" -%}
+  {%- assign t_battle = "Battleground" -%}{%- assign t_race = "Race" -%}{%- assign t_status = "Status" -%}
+  {%- assign t_first = "First polls close in" -%}{%- assign t_closed = "states closed" -%}{%- assign t_next = "Next closing" -%}
+  {%- assign t_none = "No race called yet" -%}{%- assign t_demo = "SIMULATION" -%}
+  {%- assign t_dem = "DEM" -%}{%- assign t_rep = "REP" -%}{%- assign t_ind = "IND" -%}
+  {%- assign t_ctrl_d = "DEM CONTROL" -%}{%- assign t_ctrl_r = "REP CONTROL" -%}{%- assign t_seats = "seats" -%}{%- assign t_races = "races" -%}
+  {%- assign t_delegation = "House delegation" -%}{%- assign t_pick_state = "Pick a state in the plugin settings" -%}
+  {%- assign t_waiting = "waiting" -%}{%- assign t_held = "not up" -%}{%- assign t_close = "Polls close" -%}
+  {%- assign t_special = "special" -%}{%- assign t_flips_title = "Seats that flipped" -%}{%- assign t_states = "states" -%}
+  {%- assign t_polls_closed = "Polls closed" -%}{%- assign t_source = "Source: AP via The New York Times" -%}
+{%- endif -%}
+
+{%- assign upd = updated_ts | plus: off | date: tf -%}
+{%- assign to_first = polls.first_ts | minus: now -%}
+{%- assign cd_h = to_first | divided_by: 3600 | floor -%}
+{%- assign cd_m = to_first | modulo: 3600 | divided_by: 60 | floor -%}
+{%- assign next_time = polls.next_ts | plus: off | date: tf -%}
+{%- if phase == "pre" and to_first <= 0 -%}{%- assign phase = "live" -%}{%- endif -%}
+
+{%- capture svg_logo -%}<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linejoin="round"><path d="M7 10V4h10v6"/><path d="M10 7h4"/><rect x="3" y="10" width="18" height="10" rx="1"/><path d="M8 13h8"/></svg>{%- endcapture -%}
+{%- capture title_bar -%}
+<div class="title_bar">
+  <img class="image" src="data:image/svg+xml;base64,{{ svg_logo | base64_encode }}">
+  <span class="title">{{ t_title }}</span>
+  <span class="instance">{% if demo == 1 %}{{ t_demo }} · {% endif %}{{ t_updated }} {{ upd }}{% if phase != "pre" %} · {{ t_polls_closed }} {{ polls.closed }}/{{ polls.total }}{% endif %}</span>
+</div>
+{%- endcapture -%}
+{%- capture title_bar_short -%}
+<div class="title_bar">
+  <img class="image" src="data:image/svg+xml;base64,{{ svg_logo | base64_encode }}">
+  <span class="title">{% if lang == "fr" %}Midterms 2026{% else %}{{ t_title }}{% endif %}</span>
+  <span class="instance">{% if demo == 1 %}SIM · {% endif %}{{ upd }}</span>
+</div>
+{%- endcapture -%}

@@ -1,0 +1,59 @@
+name: Update results
+
+# Results are published to the "data" branch (single commit, force-pushed: no history bloat)
+# and served by raw.githubusercontent.com → TRMNL polling URL.
+on:
+  schedule:
+    - cron: "50 22 3 11 *"      # Nov 3, 22:50 UTC: election-night loop #1 (~6 h, every 2 min)
+    - cron: "40 4 4 11 *"       # Nov 4, 04:40 UTC: loop #2 (late West Coast / Alaska counts)
+    - cron: "*/10 * 3-10 11 *"  # Nov 3-10: every 10 min
+    - cron: "23 * 11-30 11 *"   # rest of November: hourly (late calls, recounts)
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: "Night mode: keep refreshing for N minutes (0 = single update, max 350)"
+        default: "0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-${{ github.event.schedule || 'manual' }}
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 358
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build and publish
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          SCHED: ${{ github.event.schedule }}
+          MINUTES: ${{ github.event.inputs.minutes }}
+        run: |
+          case "$SCHED" in
+            "50 22 3 11 *"|"40 4 4 11 *") MIN=350 ;;
+            *) MIN=${MINUTES:-0} ;;
+          esac
+          END=$(( $(date +%s) + MIN * 60 ))
+          git config --global user.name "midterms-bot"
+          git config --global user.email "midterms-bot@users.noreply.github.com"
+          while true; do
+            rm -rf out && mkdir out
+            if node scripts/build.mjs --out out; then
+              cd out
+              git init -q -b data
+              git add -A
+              git commit -q -m "results $(date -u +%H:%M)"
+              git push -q -f "https://x-access-token:${TOKEN}@github.com/${REPO}.git" data || echo "push failed"
+              cd ..
+            fi
+            [ "$(date +%s)" -ge "$END" ] && break
+            sleep 120
+          done

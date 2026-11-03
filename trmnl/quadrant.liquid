@@ -1,0 +1,82 @@
+{%- assign devs = "og,x" | split: "," -%}
+<div class="layout layout--col layout--top layout--stretch-x gap--medium">
+{%- if view == "overview" or view == "senate" or view == "house" or view == "governors" -%}
+  {%- case view -%}
+    {%- when "senate" -%}{%- assign chs = "senate" | split: "," -%}
+    {%- when "house" -%}{%- assign chs = "house" | split: "," -%}
+    {%- when "governors" -%}{%- assign chs = "gov" | split: "," -%}
+    {%- else -%}{%- assign chs = "senate,house,gov" | split: "," -%}
+  {%- endcase -%}
+  {%- for ch in chs -%}
+    {%- case ch -%}
+      {%- when "senate" -%}{%- assign c = senate -%}{%- assign tot = 100 -%}{%- assign cname = t_senate -%}{%- assign need = "51" -%}
+      {%- when "house" -%}{%- assign c = house -%}{%- assign tot = 435 -%}{%- assign cname = t_house -%}{%- assign need = "218" -%}
+      {%- else -%}{%- assign c = gov -%}{%- assign tot = 50 -%}{%- assign cname = t_gov -%}{%- assign need = "" -%}
+    {%- endcase -%}
+    {%- assign w = c.d | times: 99.0 | divided_by: tot -%}{%- assign dn = w | floor -%}{%- assign dp = w | minus: dn | times: 3.8 | round -%}
+    {%- assign w = c.r | times: 99.0 | divided_by: tot -%}{%- assign rn = w | floor -%}{%- assign rp = w | minus: rn | times: 3.8 | round -%}
+    {%- if chs.size > 1 -%}
+    <div class="flex flex--col flex--left flex--top gap--xsmall w--full">
+      <div class="flex flex--row flex--between flex--center-y w--full">
+        <span class="label label--small"><span class="text--bold">{{ cname }}&nbsp;</span>{{ c.called }}/{{ c.total }}</span>
+        <span class="label label--small"><span class="text--bold">{{ c.d }}</span>&nbsp;{{ t_dem }} · {{ t_rep }}&nbsp;<span class="text--bold">{{ c.r }}</span>{% if c.ctrl == "D" or c.ctrl == "R" %} · {{ c.ctrl }} maj.{% endif %}</span>
+      </div>
+      <div class="flex flex--row gap--none w--full h--[10px] outline">
+        {%- if dn > 0 -%}<div class="bg--black h--full no-shrink w--[{{ dn }}cqw]"></div>{%- endif -%}{%- if dp > 0 -%}<div class="bg--black h--full no-shrink w--[{{ dp }}px]"></div>{%- endif -%}
+        <div class="grow h--full"></div>
+        {%- if rp > 0 -%}<div class="bg--gray-50 h--full no-shrink w--[{{ rp }}px]"></div>{%- endif -%}{%- if rn > 0 -%}<div class="bg--gray-50 h--full no-shrink w--[{{ rn }}cqw]"></div>{%- endif -%}
+      </div>
+    </div>
+    {%- else -%}
+    <div class="flex flex--row flex--between flex--center-y w--full">
+      <span class="title title--small">{{ cname }}</span>
+      {%- if c.ctrl == "D" or c.ctrl == "R" -%}<span class="label label--small label--inverted">{% if c.ctrl == "D" %}{{ t_ctrl_d }}{% else %}{{ t_ctrl_r }}{% endif %}</span>{%- else -%}<span class="label label--small label--gray">{{ c.called }}/{{ c.total }} {{ t_called }}</span>{%- endif -%}
+    </div>
+    <div class="flex flex--row flex--between flex--bottom w--full">
+      <div class="flex flex--row flex--bottom gap--small"><span class="value value--large value--tnums">{{ c.d }}</span><span class="label label--small">{{ t_dem }}</span></div>
+      <div class="flex flex--row flex--bottom gap--small"><span class="label label--small">{{ t_rep }}</span><span class="value value--large value--tnums">{{ c.r }}</span></div>
+    </div>
+    <div class="flex flex--row gap--none w--full h--[12px] outline">
+      {%- if dn > 0 -%}<div class="bg--black h--full no-shrink w--[{{ dn }}cqw]"></div>{%- endif -%}{%- if dp > 0 -%}<div class="bg--black h--full no-shrink w--[{{ dp }}px]"></div>{%- endif -%}
+      <div class="grow h--full"></div>
+      {%- if rp > 0 -%}<div class="bg--gray-50 h--full no-shrink w--[{{ rp }}px]"></div>{%- endif -%}{%- if rn > 0 -%}<div class="bg--gray-50 h--full no-shrink w--[{{ rn }}cqw]"></div>{%- endif -%}
+    </div>
+    <span class="label label--small label--gray" data-clamp="1">{% if need != "" %}{{ need }} {{ t_to_win }} · {% endif %}{{ t_flips }} D+{{ c.flip_d }} R+{{ c.flip_r }}</span>
+    {%- endif -%}
+  {%- endfor -%}
+{%- elsif view == "state" -%}
+  {%- assign statewide = focus.senate | concat: focus.gov -%}
+  {%- for r in statewide limit: 1 -%}
+  <div class="flex flex--row flex--between flex--center-y w--full">
+    <span class="title title--small">{{ focus.nm }} · {% if r.o == "S" %}{{ t_senate }}{% else %}{{ t_gov1 }}{% endif %}</span>
+    {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }} {{ t_win }}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.in }}%</span>{%- endif -%}
+  </div>
+  <div class="flex flex--row flex--between flex--bottom w--full"><span class="label">{{ r.a.n }} ({{ r.a.p }})</span><span class="value value--small value--tnums">{% if r.s != "wait" %}{{ r.a.pct }}%{% else %}–{% endif %}</span></div>
+  <div class="flex flex--row flex--between flex--bottom w--full"><span class="label">{{ r.b.n }} ({{ r.b.p }})</span><span class="value value--small value--tnums">{% if r.s != "wait" %}{{ r.b.pct }}%{% else %}–{% endif %}</span></div>
+  {%- else -%}
+  <span class="title title--small">{{ focus.nm }}</span>
+  {%- endfor -%}
+  <span class="label label--small label--gray">{{ t_house }} · D {{ focus.house.d }} · R {{ focus.house.r }} · {{ focus.house.called }}/{{ focus.house.total }}</span>
+{%- else -%}
+  {%- if view == "battleground" -%}
+    {%- assign l1 = battle | where: "s", "lead" -%}{%- assign l2 = battle | where: "s", "wait" -%}{%- assign l3 = battle | where: "s", "called" -%}
+    {%- assign rlist = l1 | concat: l2 | concat: l3 -%}
+  {%- else -%}{%- assign rlist = calls -%}{%- endif -%}
+  {%- if rlist.size > 0 -%}
+  {%- for dev in devs -%}
+  {%- if dev == "og" -%}{%- assign nk = 6 -%}{%- assign vis = "lg:hidden" -%}{%- else -%}{%- assign nk = 9 -%}{%- assign vis = "hidden lg:flex" -%}{%- endif -%}
+  <div class="flex flex--col flex--left flex--top gap--xsmall w--full {{ vis }}">
+  {%- for r in rlist limit: nk -%}
+    <div class="flex flex--row flex--between flex--center-y gap--small w--full">
+      <span class="label label--small"><span class="text--bold">{{ r.lbl }}{% if r.o == "S" %} Sen{% elsif r.o == "G" %} Gov{% endif %}&nbsp;</span>{% if r.s == "wait" %}{{ r.a.n }} / {{ r.b.n }}{% elsif r.s == "called" %}{{ r.wn }}{% else %}{{ r.a.pct }}–{{ r.b.pct }}{% endif %}</span>
+      {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }}{% if r.f == 1 %} {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray">{% if lang == "fr" %}{{ r.rtfr }}{% else %}{{ r.rt }}{% endif %}</span>{%- endif -%}
+    </div>
+  {%- endfor -%}
+  </div>
+  {%- endfor -%}
+  {%- else -%}
+  <span class="label label--small label--gray">{% if phase == "pre" %}{{ t_first }} {{ cd_h }}h{% if cd_m < 10 %}0{% endif %}{{ cd_m }}{% else %}{{ t_none }}{% endif %}</span>
+  {%- endif -%}
+{%- endif -%}
+</div>
+{{ title_bar_short }}

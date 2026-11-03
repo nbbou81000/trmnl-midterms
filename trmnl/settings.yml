@@ -1,0 +1,95 @@
+---
+strategy: polling
+polling_verb: get
+polling_url: https://raw.githubusercontent.com/nbbou81000/trmnl-midterms/data/{{ focus_state }}.json
+polling_headers: ''
+polling_body: ''
+refresh_interval: 15
+no_screen_padding: 'no'
+dark_mode: 'no'
+name: US Midterms 2026 — Live Results
+custom_fields:
+- keyname: about
+  name: About This Plugin
+  field_type: author_bio
+  category: news
+  description: Live results of the 2026 US midterm elections (Senate, House, Governors) — seats, key races, latest calls, flips, and a per-state view. Results from the Associated Press, via the public feed of The New York Times. Updated every 2 minutes on election night.
+  github_url: https://github.com/nbbou81000/trmnl-midterms
+- keyname: view
+  field_type: select
+  name: Screen
+  description: What to show
+  options:
+  - "Overview (3 chambers + key races + latest calls): overview"
+  - "Senate: senate"
+  - "House: house"
+  - "Governors: governors"
+  - "Battleground races: battleground"
+  - "Latest calls: calls"
+  - "My state: state"
+  - "Rotate every 10 min: rotate"
+  default: overview
+- keyname: focus_state
+  field_type: select
+  name: State
+  description: Used by the "My state" screen (and by "Rotate")
+  options:
+  - "None: us"
+  - "Alabama: al"
+  - "Alaska: ak"
+  - "Arizona: az"
+  - "Arkansas: ar"
+  - "California: ca"
+  - "Colorado: co"
+  - "Connecticut: ct"
+  - "Delaware: de"
+  - "Florida: fl"
+  - "Georgia: ga"
+  - "Hawaii: hi"
+  - "Idaho: id"
+  - "Illinois: il"
+  - "Indiana: in"
+  - "Iowa: ia"
+  - "Kansas: ks"
+  - "Kentucky: ky"
+  - "Louisiana: la"
+  - "Maine: me"
+  - "Maryland: md"
+  - "Massachusetts: ma"
+  - "Michigan: mi"
+  - "Minnesota: mn"
+  - "Mississippi: ms"
+  - "Missouri: mo"
+  - "Montana: mt"
+  - "Nebraska: ne"
+  - "Nevada: nv"
+  - "New Hampshire: nh"
+  - "New Jersey: nj"
+  - "New Mexico: nm"
+  - "New York: ny"
+  - "North Carolina: nc"
+  - "North Dakota: nd"
+  - "Ohio: oh"
+  - "Oklahoma: ok"
+  - "Oregon: or"
+  - "Pennsylvania: pa"
+  - "Rhode Island: ri"
+  - "South Carolina: sc"
+  - "South Dakota: sd"
+  - "Tennessee: tn"
+  - "Texas: tx"
+  - "Utah: ut"
+  - "Vermont: vt"
+  - "Virginia: va"
+  - "Washington: wa"
+  - "West Virginia: wv"
+  - "Wisconsin: wi"
+  - "Wyoming: wy"
+  default: us
+- keyname: language
+  field_type: select
+  name: Language
+  options:
+  - "English: en"
+  - "Français: fr"
+  default: en
