@@ -35,6 +35,24 @@
   {%- assign t_waiting = "attente" -%}{%- assign t_held = "non renouvelés" -%}{%- assign t_close = "Fermeture" -%}
   {%- assign t_special = "partielle" -%}{%- assign t_flips_title = "Sièges qui basculent" -%}{%- assign t_states = "États" -%}
   {%- assign t_polls_closed = "Bureaux fermés" -%}{%- assign t_source = "Source : AP via The New York Times" -%}
+{%- elsif lang == "es" -%}
+  {%- assign tf = "%H:%M" -%}
+  {%- assign t_title = "Elecciones de medio término 2026" -%}
+  {%- assign t_senate = "Senado" -%}{%- assign t_gov1 = "Gobernador" -%}{%- assign t_house = "Cámara" -%}{%- assign t_gov = "Gobernadores" -%}
+  {%- assign t_called = "proclamadas" -%}{%- assign t_to_win = "para la mayoría" -%}
+  {%- assign t_vp = "R: 50 + voto del vicepresidente" -%}
+  {%- assign t_flips = "Cambios" -%}{%- assign t_lead = "Adelante" -%}{%- assign t_updated = "Actualizado" -%}
+  {%- assign t_win = "gana" -%}{%- assign t_flip = "CAMBIO" -%}{%- assign t_in = "escrutado" -%}
+  {%- assign t_key = "Contiendas clave" -%}{%- assign t_latest = "Últimas proyecciones" -%}{%- assign t_pop = "Voto popular" -%}
+  {%- assign t_battle = "Contiendas reñidas" -%}{%- assign t_race = "Contienda" -%}{%- assign t_status = "Estado" -%}
+  {%- assign t_first = "Primeros cierres en" -%}{%- assign t_closed = "estados cerrados" -%}{%- assign t_next = "Próximo cierre" -%}
+  {%- assign t_none = "Aún no hay proyecciones" -%}{%- assign t_demo = "SIMULACIÓN" -%}
+  {%- assign t_dem = "DEM" -%}{%- assign t_rep = "REP" -%}{%- assign t_ind = "IND" -%}
+  {%- assign t_ctrl_d = "MAYORÍA DEM" -%}{%- assign t_ctrl_r = "MAYORÍA REP" -%}{%- assign t_seats = "escaños" -%}{%- assign t_races = "contiendas" -%}
+  {%- assign t_delegation = "Delegación en la Cámara" -%}{%- assign t_pick_state = "Elija un estado en la configuración" -%}
+  {%- assign t_waiting = "pendiente" -%}{%- assign t_held = "sin elección" -%}{%- assign t_close = "Cierre" -%}
+  {%- assign t_special = "especial" -%}{%- assign t_flips_title = "Escaños que cambian" -%}{%- assign t_states = "estados" -%}
+  {%- assign t_polls_closed = "Urnas cerradas" -%}{%- assign t_source = "Fuente: AP vía The New York Times" -%}
 {%- else -%}
   {%- assign tf = "%-I:%M %p" -%}
   {%- assign t_title = "US Midterms 2026" -%}
@@ -55,6 +73,7 @@
   {%- assign t_polls_closed = "Polls closed" -%}{%- assign t_source = "Source: AP via The New York Times" -%}
 {%- endif -%}
 
+{%- assign rtk = "rt" -%}{%- if lang == "fr" -%}{%- assign rtk = "rtfr" -%}{%- elsif lang == "es" -%}{%- assign rtk = "rtes" -%}{%- endif -%}
 {%- assign upd = updated_ts | plus: off | date: tf -%}
 {%- assign to_first = polls.first_ts | minus: now -%}
 {%- assign cd_h = to_first | divided_by: 3600 | floor -%}
@@ -73,7 +92,7 @@
 {%- capture title_bar_short -%}
 <div class="title_bar">
   <img class="image" src="data:image/svg+xml;base64,{{ svg_logo | base64_encode }}">
-  <span class="title">{% if lang == "fr" %}Midterms 2026{% else %}{{ t_title }}{% endif %}</span>
+  <span class="title">{% if lang == "en" %}{{ t_title }}{% else %}Midterms 2026{% endif %}</span>
   <span class="instance">{% if demo == 1 %}SIM · {% endif %}{{ upd }}</span>
 </div>
 {%- endcapture -%}

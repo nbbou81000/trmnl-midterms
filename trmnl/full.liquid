@@ -1,5 +1,4 @@
 {%- assign chs = "senate,house,gov" | split: "," -%}
-{%- assign devs = "og,x" | split: "," -%}
 <div class="layout layout--col layout--top layout--stretch-x gap--small">
 {%- if view == "nodata" -%}
   <div class="flex flex--col flex--center grow w--full gap">
@@ -55,42 +54,52 @@
   <div class="divider"></div>
   {%- assign l1 = battle | where: "s", "lead" -%}{%- assign l2 = battle | where: "s", "wait" -%}{%- assign l3 = battle | where: "s", "called" -%}
   {%- assign blist = l1 | concat: l2 | concat: l3 -%}
-  {%- for dev in devs -%}
-  {%- if dev == "og" -%}{%- assign nk = 10 -%}{%- assign nc = 10 -%}{%- assign vis = "lg:hidden" -%}{%- else -%}{%- assign nk = 22 -%}{%- assign nc = 22 -%}{%- assign vis = "hidden lg:grid" -%}{%- endif -%}
-  <div class="grid w--full gap--large {{ vis }}">
-    <div class="col--span-7 flex flex--col flex--left flex--top gap--xsmall">
-      <span class="title title--small lg:title--medium">{{ t_key }}</span>
-      {%- for r in blist limit: nk -%}
-      <div class="grid grid--cols-12 gap--small w--full">
-        <span class="col--span-2 label label--small text--bold">{{ r.lbl }}{% if r.o == "G" %} Gov{% elsif r.o == "S" %} Sen{% endif %}</span>
-        <span class="col--span-3 label label--small" data-clamp="1">{{ r.a.n }}{% if r.s != "wait" %} {{ r.a.pct }}{% endif %}</span>
-        <span class="col--span-3 label label--small" data-clamp="1">{{ r.b.n }}{% if r.s != "wait" %} {{ r.b.pct }}{% endif %}</span>
-        <span class="col--span-1 label label--small label--gray">{% if r.s != "wait" %}{{ r.in }}%{% endif %}</span>
-        <div class="col--span-3 flex flex--row flex--right">{%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }} {{ t_win }}{% if r.f == 1 %} · {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray">{% if lang == "fr" %}{{ r.rtfr }}{% else %}{{ r.rt }}{% endif %}</span>{%- endif -%}</div>
-      </div>
-      {%- endfor -%}
-    </div>
-    <div class="col--span-5 flex flex--col flex--left flex--top gap--xsmall">
-      <span class="title title--small lg:title--medium">{{ t_latest }}</span>
-      {%- if calls.size > 0 -%}
-        {%- for r in calls limit: nc -%}
-        <div class="flex flex--row flex--between flex--center-y gap--small w--full">
-          <span class="label label--small" data-clamp="1">{{ r.lbl }}{% if r.o == "S" %} Sen{% elsif r.o == "G" %} Gov{% endif %} · {{ r.wn }}</span>
-          <span class="label label--small {% if r.f == 1 %}label--inverted{% else %}label--outline{% endif %}">{{ r.w }}{% if r.f == 1 %} {{ t_flip }}{% endif %}</span>
-        </div>
+  <div class="grid w--full gap--large h--[57cqh]">
+    <div class="col--span-7 h--full">
+      <table class="table table--xsmall" data-table-limit="true">
+        <thead><tr><th colspan="5"><span class="title title--small lg:title--medium">{{ t_key }}</span></th></tr></thead>
+        <tbody>
+        {%- for r in blist -%}
+        <tr>
+          <td><span class="label label--small text--bold">{{ r.lbl }}{% if r.o == "G" %} Gov{% elsif r.o == "S" %} Sen{% endif %}</span></td>
+          <td><span class="label label--small">{{ r.a.n }}{% if r.s != "wait" %} {{ r.a.pct }}{% endif %}</span></td>
+          <td><span class="label label--small">{{ r.b.n }}{% if r.s != "wait" %} {{ r.b.pct }}{% endif %}</span></td>
+          <td><span class="label label--small label--gray">{% if r.s != "wait" %}{{ r.in }}%{% endif %}</span></td>
+          <td class="text--right">{%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }} {{ t_win }}{% if r.f == 1 %} · {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}</td>
+        </tr>
         {%- endfor -%}
-      {%- elsif phase == "pre" -%}
+        </tbody>
+      </table>
+    </div>
+    <div class="col--span-5 h--full">
+      {%- if calls.size > 0 -%}
+      <table class="table table--xsmall" data-table-limit="true">
+        <thead><tr><th colspan="2"><span class="title title--small lg:title--medium">{{ t_latest }}</span></th></tr></thead>
+        <tbody>
+        {%- for r in calls -%}
+        <tr>
+          <td><span class="label label--small">{{ r.lbl }}{% if r.o == "S" %} Sen{% elsif r.o == "G" %} Gov{% endif %} · {{ r.wn }}</span></td>
+          <td class="text--right"><span class="label label--small {% if r.f == 1 %}label--inverted{% else %}label--outline{% endif %}">{{ r.w }}{% if r.f == 1 %} {{ t_flip }}{% endif %}</span></td>
+        </tr>
+        {%- endfor -%}
+        </tbody>
+      </table>
+      {%- else -%}
+      <div class="flex flex--col flex--left flex--top gap--xsmall">
+        <span class="title title--small lg:title--medium">{{ t_latest }}</span>
+        {%- if phase == "pre" -%}
         <span class="label label--small label--gray">{{ t_first }}</span>
         <span class="value value--large lg:value--xlarge value--tnums">{{ cd_h }}h{% if cd_m < 10 %}0{% endif %}{{ cd_m }}</span>
         <span class="label label--small">{{ t_next }} · {{ next_time }}</span>
-        <span class="label label--small label--gray" data-clamp="2">{{ polls.next_st }}</span>
-      {%- else -%}
+        <span class="label label--small label--gray">{{ polls.next_st }}</span>
+        {%- else -%}
         <span class="label label--small label--gray">{{ t_none }}</span>
         {%- if polls.next_ts > 0 -%}<span class="label label--small">{{ t_next }} · {{ next_time }} · {{ polls.next_st }}</span>{%- endif -%}
+        {%- endif -%}
+      </div>
       {%- endif -%}
     </div>
   </div>
-  {%- endfor -%}
 
 {%- elsif view == "senate" or view == "house" or view == "governors" -%}
   {%- comment -%} ========== CHAMBER: seat waffle + race list ========== {%- endcomment -%}
@@ -103,7 +112,7 @@
   {%- assign dli = c.d | plus: c.i -%}
   {%- assign l1 = list | where: "s", "lead" -%}{%- assign l2 = list | where: "s", "wait" -%}{%- assign l3 = list | where: "s", "called" -%}
   {%- assign rlist = l1 | concat: l2 | concat: l3 -%}
-  <div class="grid w--full gap--large">
+  <div class="grid w--full gap--large h--full">
     <div class="col--span-5 flex flex--col flex--left flex--top gap--small">
       <div class="flex flex--row flex--between flex--center-y w--full">
         <span class="title lg:title--large">{{ cname }}</span>
@@ -137,28 +146,28 @@
         <span class="label label--small">{{ t_flips }} D+{{ c.flip_d }} R+{{ c.flip_r }}{% if c.lead_d > 0 or c.lead_r > 0 %} · {{ t_lead }} {{ c.lead_d }}–{{ c.lead_r }}{% endif %}</span>
       </div>
     </div>
-    {%- for dev in devs -%}
-    {%- if dev == "og" -%}{%- assign nk = 18 -%}{%- assign vis = "lg:hidden" -%}{%- else -%}{%- assign nk = 27 -%}{%- assign vis = "hidden lg:flex" -%}{%- endif -%}
-    <div class="col--span-7 flex flex--col flex--left flex--top gap--xsmall {{ vis }}">
-      <div class="grid grid--cols-12 gap--small w--full">
-        <span class="col--span-2 title title--small">{{ t_race }}</span>
-        <span class="col--span-3 title title--small">{{ t_dem }}</span>
-        <span class="col--span-3 title title--small">{{ t_rep }}</span>
-        <span class="col--span-1 title title--small">%</span>
-        <div class="col--span-3 flex flex--row flex--right"><span class="title title--small">{{ t_status }}</span></div>
-      </div>
-      {%- for r in rlist limit: nk -%}
-      <div class="grid grid--cols-12 gap--small w--full">
-        <span class="col--span-2 label label--small text--bold">{{ r.lbl }}{% if r.sp == 1 %}*{% endif %}</span>
-        <span class="col--span-3 label label--small" data-clamp="1">{{ r.a.n }}{% if r.s != "wait" %} {{ r.a.pct }}{% endif %}</span>
-        <span class="col--span-3 label label--small" data-clamp="1">{{ r.b.n }}{% if r.s != "wait" %} {{ r.b.pct }}{% endif %}</span>
-        <span class="col--span-1 label label--small label--gray">{% if r.s != "wait" %}{{ r.in }}{% endif %}</span>
-        <div class="col--span-3 flex flex--row flex--right">{%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }} {{ t_win }}{% if r.f == 1 %} · {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray">{% if lang == "fr" %}{{ r.rtfr }}{% else %}{{ r.rt }}{% endif %}</span>{%- endif -%}</div>
-      </div>
-      {%- endfor -%}
-      {%- if rlist.size > nk -%}<span class="label label--small label--gray">+ {{ rlist.size | minus: nk }} {{ t_races }}</span>{%- endif -%}
+    <div class="col--span-7 h--full">
+      <table class="table table--xsmall" data-table-limit="true">
+        <thead><tr>
+          <th><span class="title title--small">{{ t_race }}</span></th>
+          <th><span class="title title--small">{{ t_dem }}</span></th>
+          <th><span class="title title--small">{{ t_rep }}</span></th>
+          <th><span class="title title--small">%</span></th>
+          <th class="text--right"><span class="title title--small">{{ t_status }}</span></th>
+        </tr></thead>
+        <tbody>
+        {%- for r in rlist -%}
+        <tr>
+          <td><span class="label label--small text--bold">{{ r.lbl }}{% if r.sp == 1 %}*{% endif %}</span></td>
+          <td><span class="label label--small">{{ r.a.n }}{% if r.s != "wait" %} {{ r.a.pct }}{% endif %}</span></td>
+          <td><span class="label label--small">{{ r.b.n }}{% if r.s != "wait" %} {{ r.b.pct }}{% endif %}</span></td>
+          <td><span class="label label--small label--gray">{% if r.s != "wait" %}{{ r.in }}{% endif %}</span></td>
+          <td class="text--right">{%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }} {{ t_win }}{% if r.f == 1 %} · {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }}</span>{%- else -%}<span class="label label--small label--gray">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}</td>
+        </tr>
+        {%- endfor -%}
+        </tbody>
+      </table>
     </div>
-    {%- endfor -%}
   </div>
 
 {%- elsif view == "battleground" or view == "calls" -%}
@@ -172,34 +181,31 @@
     <span class="label label--small label--gray">{{ t_senate }} {{ senate.called }}/35 · {{ t_house }} {{ house.called }}/435 · Gov {{ gov.called }}/36</span>
   </div>
   {%- if list.size > 0 -%}
-  {%- for dev in devs -%}
-  {%- if dev == "og" -%}{%- assign nk = 7 -%}{%- assign vis = "lg:hidden" -%}{%- else -%}{%- assign nk = 12 -%}{%- assign vis = "hidden lg:grid" -%}{%- endif -%}
-  <div class="grid grid--cols-2 gap--large w--full {{ vis }}">
-    {%- for colno in (0..1) -%}
-    {%- assign skip = colno | times: nk -%}
-    <div class="flex flex--col flex--left flex--top gap--small">
-    {%- for r in list offset: skip limit: nk -%}
-      <div class="flex flex--col flex--left w--full">
-        <div class="flex flex--row flex--between flex--center-y gap--small w--full">
+  <div class="columns w--full" data-overflow="true" data-overflow-max-height="auto" data-overflow-max-cols="2" data-overflow-counter="true">
+    <div class="column">
+    {%- for r in list -%}
+      <div class="item">
+        <div class="meta"></div>
+        <div class="content w--full">
+          <div class="flex flex--row flex--between flex--center-y gap--small w--full">
+            {%- if view == "calls" -%}
+            <span class="title title--small">{{ r.wn }} ({{ r.w }})</span>
+            {%- if r.f == 1 -%}<span class="label label--small label--inverted">{{ t_flip }}</span>{%- else -%}<span class="label label--small label--gray">{{ r.ts | plus: off | date: tf }}</span>{%- endif -%}
+            {%- else -%}
+            <span class="title title--small">{{ r.lbl }}{% if r.o == "S" %} {{ t_senate }}{% elsif r.o == "G" %} Gov{% endif %}</span>
+            {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }} {{ t_win }}{% if r.f == 1 %} · {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }} · {{ r.in }}%</span>{%- else -%}<span class="label label--small label--gray">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}
+            {%- endif -%}
+          </div>
           {%- if view == "calls" -%}
-          <span class="title title--small" data-clamp="1">{{ r.wn }} ({{ r.w }})</span>
-          {%- if r.f == 1 -%}<span class="label label--small label--inverted">{{ t_flip }}</span>{%- else -%}<span class="label label--small label--gray">{{ r.ts | plus: off | date: tf }}</span>{%- endif -%}
+          <span class="label label--small label--gray">{{ r.lbl }}{% if r.o == "S" %} {{ t_senate }}{% elsif r.o == "G" %} Gov{% else %} {{ t_house }}{% endif %} · {{ r.a.n }} {{ r.a.pct }} – {{ r.b.n }} {{ r.b.pct }}</span>
           {%- else -%}
-          <span class="title title--small" data-clamp="1">{{ r.lbl }}{% if r.o == "S" %} {{ t_senate }}{% elsif r.o == "G" %} Gov{% endif %}</span>
-          {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }} {{ t_win }}{% if r.f == 1 %} · {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg }} · {{ r.in }}%</span>{%- else -%}<span class="label label--small label--gray">{% if lang == "fr" %}{{ r.rtfr }}{% else %}{{ r.rt }}{% endif %}</span>{%- endif -%}
+          <span class="label label--small">{{ r.a.n }} ({{ r.a.p }}){% if r.s != "wait" %} {{ r.a.pct }}{% endif %} · {{ r.b.n }} ({{ r.b.p }}){% if r.s != "wait" %} {{ r.b.pct }}{% endif %}</span>
           {%- endif -%}
         </div>
-        {%- if view == "calls" -%}
-        <span class="label label--small label--gray" data-clamp="1">{{ r.lbl }}{% if r.o == "S" %} {{ t_senate }}{% elsif r.o == "G" %} Gov{% else %} {{ t_house }}{% endif %} · {{ r.a.n }} {{ r.a.pct }} – {{ r.b.n }} {{ r.b.pct }}</span>
-        {%- else -%}
-        <span class="label label--small" data-clamp="1">{{ r.a.n }} ({{ r.a.p }}){% if r.s != "wait" %} {{ r.a.pct }}{% endif %} · {{ r.b.n }} ({{ r.b.p }}){% if r.s != "wait" %} {{ r.b.pct }}{% endif %}</span>
-        {%- endif -%}
       </div>
     {%- endfor -%}
     </div>
-    {%- endfor -%}
   </div>
-  {%- endfor -%}
   {%- else -%}
   <div class="flex flex--col flex--center grow w--full gap">
     {%- if phase == "pre" -%}
@@ -226,7 +232,7 @@
       <div class="flex flex--col flex--left flex--top gap--xsmall w--full">
         <div class="flex flex--row flex--between flex--center-y w--full">
           <span class="title title--small">{% if r.o == "S" %}{{ t_senate }}{% if r.sp == 1 %} ({{ t_special }}){% endif %}{% else %}{{ t_gov1 }}{% endif %}</span>
-          {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.wn }} {{ t_win }}{% if r.f == 1 %} · {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.in }}% {{ t_in }}</span>{%- else -%}<span class="label label--small label--gray">{% if lang == "fr" %}{{ r.rtfr }}{% else %}{{ r.rt }}{% endif %}</span>{%- endif -%}
+          {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.wn }} {{ t_win }}{% if r.f == 1 %} · {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.in }}% {{ t_in }}</span>{%- else -%}<span class="label label--small label--gray">{{ r[rtk] | default: r.rt }}</span>{%- endif -%}
         </div>
         <div class="flex flex--row flex--between w--full">
           <span class="label">{{ r.a.n }} ({{ r.a.p }})</span><span class="value value--xsmall value--tnums">{% if r.s != "wait" %}{{ r.a.pct }}%{% else %}–{% endif %}</span>
@@ -251,25 +257,23 @@
         <span class="title title--small">{{ t_delegation }}</span>
         <span class="label label--small">D {{ hs.d }} · R {{ hs.r }} · {{ hs.called }}/{{ hs.total }}</span>
       </div>
-      {%- for dev in devs -%}
-      {%- if dev == "og" -%}{%- assign nk = 13 -%}{%- assign vis = "lg:hidden" -%}{%- else -%}{%- assign nk = 26 -%}{%- assign vis = "hidden lg:grid" -%}{%- endif -%}
-      {%- assign ncol = 1 -%}{%- if focus.house_races.size > nk -%}{%- assign ncol = 2 -%}{%- endif -%}
-      <div class="grid grid--cols-{{ ncol }} gap--medium w--full {{ vis }}">
-        {%- for colno in (1..ncol) -%}
-        {%- assign skip = colno | minus: 1 | times: nk -%}
-        <div class="flex flex--col flex--left flex--top gap--xsmall">
-        {%- for r in focus.house_races offset: skip limit: nk -%}
-          <div class="flex flex--row flex--between flex--center-y gap--small w--full">
-            <span class="label label--small"><span class="text--bold">{{ r.lbl | split: "-" | last }}&nbsp;</span>{% if r.s == "wait" %}{{ r.a.n }} / {{ r.b.n }}{% else %}{{ r.wn }}{% endif %}</span>
-            {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }}{% if r.f == 1 %} {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg | round }}</span>{%- else -%}<span class="label label--small label--gray">–</span>{%- endif -%}
+      <div class="w--full h--[86cqh]">
+      <div class="columns" data-overflow="true" data-overflow-max-height="auto" data-overflow-max-cols="2" data-overflow-counter="true">
+        <div class="column">
+        {%- for r in focus.house_races -%}
+          <div class="item">
+            <div class="meta"></div>
+            <div class="content w--full">
+              <div class="flex flex--row flex--between flex--center-y gap--small w--full">
+                <span class="label label--small"><span class="text--bold">{{ r.lbl | split: "-" | last }}&nbsp;</span>{% if r.s == "wait" %}{{ r.a.n }} / {{ r.b.n }}{% else %}{{ r.wn }}{% endif %}</span>
+                {%- if r.s == "called" -%}<span class="label label--small label--inverted">{{ r.w }}{% if r.f == 1 %} {{ t_flip }}{% endif %}</span>{%- elsif r.s == "lead" -%}<span class="label label--small label--outline">{{ r.w }} +{{ r.mg | round }}</span>{%- else -%}<span class="label label--small label--gray">–</span>{%- endif -%}
+              </div>
+            </div>
           </div>
         {%- endfor -%}
         </div>
-        {%- endfor -%}
       </div>
-      {%- assign shown = nk | times: 2 -%}
-      {%- if focus.house_races.size > shown -%}<span class="label label--small label--gray {{ vis }}">+ {{ focus.house_races.size | minus: shown }}</span>{%- endif -%}
-      {%- endfor -%}
+      </div>
     </div>
   </div>
 {%- endif -%}

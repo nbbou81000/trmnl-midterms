@@ -19,6 +19,7 @@ const STATE_NAMES = { AL:"Alabama",AK:"Alaska",AZ:"Arizona",AR:"Arkansas",CA:"Ca
 
 const RATING = { "tossup": "Toss-up", "lean-dem": "Lean D", "lean-rep": "Lean R", "likely-dem": "Likely D", "likely-rep": "Likely R", "solid-dem": "Solid D", "solid-rep": "Solid R" };
 const RATING_FR = { "tossup": "Indécis", "lean-dem": "Penche D", "lean-rep": "Penche R", "likely-dem": "Probable D", "likely-rep": "Probable R", "solid-dem": "Sûr D", "solid-rep": "Sûr R" };
+const RATING_ES = { "tossup": "Reñida", "lean-dem": "Inclina D", "lean-rep": "Inclina R", "likely-dem": "Probable D", "likely-rep": "Probable R", "solid-dem": "Segura D", "solid-rep": "Segura R" };
 const RANK = { "tossup": 0, "lean-dem": 1, "lean-rep": 1, "likely-dem": 2, "likely-rep": 2, "solid-dem": 3, "solid-rep": 3 };
 
 async function getJSON(office) {
@@ -116,7 +117,7 @@ function reduceRace(r, nowMs) {
   return {
     o: office, st, lbl, nm: STATE_NAMES[st] || tru.name || st,
     sp: /S_W|Special/.test(r.nyt_id + r.type) ? 1 : 0,
-    rt: RATING[r.rating || r.general_rating] || "", rtfr: RATING_FR[r.rating || r.general_rating] || "",
+    rt: RATING[r.rating || r.general_rating] || "", rtfr: RATING_FR[r.rating || r.general_rating] || "", rtes: RATING_ES[r.rating || r.general_rating] || "",
     rk: RANK[r.rating || r.general_rating] ?? 4,
     a: a ? { n: a.n, p: a.p, pct: a.pct, inc: a.inc ? 1 : 0 } : null,
     b: b ? { n: b.n, p: b.p, pct: b.pct, inc: b.inc ? 1 : 0 } : null,
@@ -140,7 +141,7 @@ function tally(races) {
   return t;
 }
 
-const pick = x => ({ o: x.o, lbl: x.lbl, nm: x.nm, sp: x.sp, rt: x.rt, rtfr: x.rtfr, a: x.a, b: x.b, s: x.s, w: x.w, wn: x.wn, mg: x.mg, in: x.in, f: x.f });
+const pick = x => ({ o: x.o, lbl: x.lbl, nm: x.nm, sp: x.sp, rt: x.rt, rtfr: x.rtfr, rtes: x.rtes, a: x.a, b: x.b, s: x.s, w: x.w, wn: x.wn, mg: x.mg, in: x.in, f: x.f });
 
 async function main() {
   const raw = { senate: await getJSON("senate"), house: await getJSON("house"), governor: await getJSON("governor") };

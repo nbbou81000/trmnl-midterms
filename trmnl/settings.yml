@@ -92,4 +92,5 @@ custom_fields:
   options:
   - English: en
   - Français: fr
+  - Español: es
   default: en

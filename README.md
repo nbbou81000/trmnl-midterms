@@ -1,6 +1,6 @@
 # US Midterms 2026 — plugin TRMNL
 
-Résultats en direct des élections de mi-mandat américaines du 3 novembre 2026 sur TRMNL OG et TRMNL X : Sénat, Chambre des représentants, gouverneurs, courses clés, derniers résultats, sièges qui basculent et vue par État. Interface en anglais ou en français.
+Résultats en direct des élections de mi-mandat américaines du 3 novembre 2026 sur TRMNL OG et TRMNL X : Sénat, Chambre des représentants, gouverneurs, courses clés, derniers résultats, sièges qui basculent et vue par État. Interface en anglais, en français ou en espagnol.
 
 ![Vue d'ensemble](preview/overview-og.png)
 
