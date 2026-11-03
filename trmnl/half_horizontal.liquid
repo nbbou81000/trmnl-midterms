@@ -1,5 +1,12 @@
 {%- assign devs = "og,x" | split: "," -%}
 <div class="layout layout--col layout--top layout--stretch-x gap--small">
+{%- if view == "nodata" -%}
+  <div class="flex flex--col flex--center grow w--full gap">
+    <span class="title">{% if lang == "fr" %}En attente des données{% else %}Waiting for data{% endif %}</span>
+    <span class="label label--gray">{% if lang == "fr" %}Enregistrez le plugin puis forcez l'actualisation{% else %}Save the plugin, then force a refresh{% endif %}</span>
+  </div>
+{%- endif -%}
+
 {%- if view == "senate" or view == "house" or view == "governors" -%}
   {%- case view -%}
     {%- when "senate" -%}{%- assign chs = "senate" | split: "," -%}{%- assign list = senate_races -%}

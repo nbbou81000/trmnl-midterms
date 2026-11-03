@@ -14,6 +14,7 @@
     {%- else -%}{%- if focus -%}{%- assign view = "state" -%}{%- else -%}{%- assign view = "governors" -%}{%- endif -%}
   {%- endcase -%}
 {%- endif -%}
+{%- if updated_ts == nil -%}{%- assign view = "nodata" -%}{%- endif -%}
 {%- if view == "state" and focus == nil -%}{%- assign view = "overview" -%}{%- assign need_state = true -%}{%- endif -%}
 
 {%- if lang == "fr" -%}
